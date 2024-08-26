@@ -18,11 +18,11 @@ struct POS
 		return !(*this == other);
 	}
 
-	POS operator+(POS* other)
+	POS operator+(POS& other)
 	{
 		POS ret;
-		ret.y = y + other->y;
-		ret.x = x + other->x;
+		ret.y = y + other.y;
+		ret.x = x + other.x;
 		return ret;
 	}
 
