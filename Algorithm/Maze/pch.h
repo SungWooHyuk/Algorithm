@@ -3,6 +3,8 @@
 #include <windows.h>
 #include <iostream>
 #include <vector>
+#include <queue>
+#include <map>
 
 using namespace std;
 
@@ -16,6 +18,13 @@ struct POS
 	bool operator!=(POS& other)
 	{
 		return !(*this == other);
+	}
+
+	bool operator<(const POS& other) const
+	{
+		if (y != other.y)
+			return y < other.y;
+		return x < other.x;
 	}
 
 	POS operator+(POS& other)

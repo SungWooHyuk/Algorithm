@@ -16,6 +16,11 @@ public:
 	POS GetPos() { return _pos; }
 
 	bool CanGo(POS pos);
+
+private:
+	void		RightHand();
+	void		Bfs();
+
 private:
 
 	POS _pos = {};
