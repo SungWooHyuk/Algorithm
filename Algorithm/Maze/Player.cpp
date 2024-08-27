@@ -8,13 +8,18 @@ void Player::Init(Board* board)
 	_board = board;
 
 	//RightHand();
-	Bfs();
+	//Bfs();
+	AStar();
 }
 
 void Player::Update(uint64 deltaTick)
 {
 	if (_pathIndex >= _path.size())
+	{
+		_board->GenerateMap();
+		Init(_board);
 		return;
+	}
 
 	_sumTick += deltaTick;
 	if (_sumTick >= MOVE_TICK)
@@ -165,6 +170,147 @@ void Player::Bfs()
 		_path.push_back(pos);
 
 		// 시작점은 자신이 곧 부모이다
+		if (pos == parent[pos])
+			break;
+
+		pos = parent[pos];
+	}
+
+	std::reverse(_path.begin(), _path.end());
+}
+
+struct PQNode
+{
+	bool operator<(const PQNode& other) const { return f < other.f; }
+	bool operator>(const PQNode& other) const { return f > other.f; }
+
+	int32 f; // f = g + h
+	int32 g;
+	POS pos;
+};
+void Player::AStar()
+{
+	// 점수 매기기
+	// F = G+H
+	// F = 최종점수 ( 작을 수록 좋고, 경로에 따라 달라짐 )
+	// G = 시작점에서 해당 좌표까지 이동하는데 드는 비용 (작을수록 좋고, 경로에 따라 달라짐)
+	// H = 목적지에서 얼마나 가까운지 ( 작을 수록 좋음, 고정 )
+
+	POS start = _pos;
+	POS dest = _board->GetExitPos();
+
+	enum
+	{
+		DIR_COUNT = 8
+	};
+
+	POS front[] =
+	{
+		POS { -1, 0},	// UP
+		POS { 0, -1},	// LEFT
+		POS { 1, 0},	// DOWN
+		POS { 0, 1},	// RIGHT
+		POS {-1, -1},	// UP_LEFT
+		POS {1, -1},	// DOWN_LEFT
+		POS {1, 1},		// DOWN_RIGHT
+		POS {-1, 1},	// UP_RIGHT
+	};
+
+	int32 cost[] =
+	{
+		10,
+		10,
+		10,
+		10,
+		14,
+		14,
+		14,
+		14
+	};
+
+	const int32 size = _board->GetSize();
+
+	//ClosedList
+	//close[y][x] -> (y,x)에 방문을 했는지 여부
+	vector<vector<bool>> closed(size, vector<bool>(size, false));
+
+	//best[y][x] -> 지금까지 (y,x)에 대한 가장 좋은 비용 (작을 수록 좋음)
+	vector<vector<int32>> best(size, vector<int32>(size, INT32_MAX));
+
+	//부모 추적 해야죠
+	map<POS, POS> parent;
+
+	// openList
+	priority_queue<PQNode, vector<PQNode>, greater<PQNode>> pq;
+
+	// 1. 예약(발견) 시스템 구현
+	// - 여기서 이미 더 좋은 경로를 찾았다면 스킵
+	// 2. 뒤늦게 더 좋은 경로가 발견될시에는 예외처리 필수적으로
+	// - openlist에서 찾아서 제거하거나
+	// - pq에서 pop한 다음에 무시한다거나
+
+	// 초기값
+	{
+		int32 g = 0;
+		int32 h = 10 * (abs(dest.y - start.y) + abs(dest.x - start.x));
+		pq.push(PQNode{ g + h, g, start }); // 초기값 넣기
+		best[start.y][start.x] = g + h; // 당연한것
+		parent[start] = start; // 초기값의 부모는 나
+	}
+
+	while (pq.empty() == false)
+	{
+		// 제일 좋은 후보를 찾아준다.
+		PQNode node = pq.top();
+		pq.pop();
+
+		// 동일한 좌표를 여러 경로로 찾을 예정이다.
+		// 거기서 더 빠른 경로로 인해서 이미 방문 즉, 닫힌 경우엔 스킵
+		// 선택
+		if (closed[node.pos.y][node.pos.x])
+			continue;
+		if (best[node.pos.y][node.pos.x] < node.f)
+			continue;
+
+		closed[node.pos.y][node.pos.x] = true;
+
+		if (node.pos == dest) // 도착
+			break;
+
+		for (int32 dir = 0; dir < DIR_COUNT; dir++)
+		{
+			POS nextPos = node.pos + front[dir];
+
+			if (CanGo(nextPos) == false)
+				continue;
+			if (closed[nextPos.y][nextPos.x])
+				continue;
+
+			// 자 이제 계산
+			int32 g = node.g + cost[dir];
+			int32 h = 10 * (abs(dest.y - nextPos.y) + abs(dest.x - nextPos.x));
+
+			// 다른 경로에서 더 빠른 길을 찾았으면 스킵
+			if (best[nextPos.y][nextPos.x] <= g + h)
+				continue; // 베스트가 더 적다. 즉 이 길이 아니다.
+
+			// 오 여기가 제일 빠르네
+			best[nextPos.y][nextPos.x] = g + h;
+			pq.push(PQNode{ g + h, g, nextPos });
+			parent[nextPos] = node.pos;
+		}
+	}
+
+	// 거꾸로 올라가기
+	POS pos = dest;
+
+	_path.clear();
+	_pathIndex = 0;
+
+	while (true)
+	{
+		_path.push_back(pos);
+
 		if (pos == parent[pos])
 			break;
 
