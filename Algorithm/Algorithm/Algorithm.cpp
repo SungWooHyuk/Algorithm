@@ -3,7 +3,8 @@
 #include <list>
 #include <stack>
 #include <queue>
-
+#include "BinarySearchTree.h"
+#include <thread>
 using namespace std;
 
 //template<typename T>
@@ -602,8 +603,75 @@ using namespace std;
 //};
 //
 //#pragma endregion
+//#pragma region 이진탐색
+//
+//// 면접때 많이 물어보고, STL에서 map을 사용하면 사용된다.
+//// 이진 탐색 (binary search)
+//// 상황) 배열에 데이터가 정렬되어 있다. 무조건 정렬!!
+//
+//// Q) 82라는 숫자가 배열에 있습니까?
+//// [1][8][15][23][32][44][56][63][81][91]
+//// A) O(N)과 O(logN)과는 다르죠. 업다운 게임
+//vector<int> numbers;
+//
+//// O(logN)이다.
+//// 정렬된 배열을 이용해서 이진 탐색 가능한것.
+//// 잠깐. 배열은 그런데 중간 삽입/삭제가 느리다,, -> 트리로 가서 노드기반까지 써야함.
+//// 만들어지고 데이터가 바뀔 일이 없으면 그냥 이진 탐색만 써도 우월
+//// 정렬된 연결리스트로는 불가 ( 임의 접근 X )
+//void BinarySearch(int N)
+//{
+//	int left = 0;
+//	int right = (int)numbers.size() - 1;
+//
+//	while (left <= right)
+//	{
+//		int mid = (left + right) / 2;
+//
+//		if (N < numbers[mid])
+//		{
+//			right = mid - 1;
+//		}
+//		else if (N > numbers[mid])
+//		{
+//			left = mid + 1;
+//		}
+//		else
+//		{
+//			cout << "찾음." << endl;
+//			break;
+//		}
+//	}
+//}
+//
+//#pragma endregion
 
 int main()
 {
+	BinarySearchTree bst;
+
+	bst.Insert(30);
+	bst.Print();
+	this_thread::sleep_for(1s);
+
+	bst.Insert(10);
+	bst.Print();
+	this_thread::sleep_for(1s);
+
+	bst.Insert(20);
+	bst.Print();
+	this_thread::sleep_for(1s);
+
+	bst.Insert(25);
+	bst.Print();
+	this_thread::sleep_for(1s);
+
+	bst.Delete(20);
+	bst.Print();
+	this_thread::sleep_for(1s);
+
+	bst.Delete(10);
+	bst.Print();
+	this_thread::sleep_for(1s);
 
 }
