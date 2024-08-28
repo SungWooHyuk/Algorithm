@@ -525,7 +525,6 @@ using namespace std;
 //    return height;
 //}
 //#pragma endregion
-
 //#pragma region 우선순위 큐
 //
 //template<typename T, typename Container = vector<T>, typename Predicate = less<T>>
@@ -645,33 +644,173 @@ using namespace std;
 //}
 //
 //#pragma endregion
+//#pragma region 버블 정렬
+//
+//void BubbleSort(vector<int>& v)
+//{
+//	const int n = (int)v.size();
+//
+//	for (int i = 0; i < n - 1; ++i)
+//	{
+//		for (int j = 0; j < (n - 1 + i); ++j)
+//		{
+//			if (v[j] > v[j + 1])
+//				swap(v[j], v[j + 1]);
+//		}
+//	}
+//}
+//
+//#pragma endregion
+//#pragma region 선택 정렬
+//void SelectionSort(vector<int>& v)
+//{
+//	const int n = (int)v.size();
+//
+//	for (int i = 0; i < n - 1; ++i)
+//	{
+//		int bestIdx = i;
+//
+//		for (int j = i + 1; j < n; ++j)
+//		{
+//			if (v[j] < v[bestIdx])
+//				bestIdx = j;
+//		}
+//
+//		swap(v[i], v[bestIdx]);
+//	}
+//}
+//#pragma endregion
+//#pragma region 삽입정렬
+//void InsertionSort(vector<int>& v)
+//{
+//	const int n = (int)v.size();
+//
+//	for (int i = 1; i < n; ++i)
+//	{
+//		int insertData = v[i];
+//
+//		int j;
+//		for (j = i - 1; j >= 0; j--)
+//		{
+//			if (v[j] > insertData)
+//				v[j + 1] = v[j];
+//			else
+//				break;
+//		}
+//
+//		v[j + 1] = insertData;
+//	}
+//}
+//#pragma endregion
+//#pragma region 힙 정렬
+//void HeapSort(vector<int>& v)
+//{
+//	priority_queue<int, vector<int>, greater<int>> pq;
+//	for (int num : v)
+//		pq.push(num);
+//	v.clear();
+//	while (pq.empty() == false)
+//	{
+//		v.push_back(pq.top());
+//		pq.pop();
+//	}
+//}
+//#pragma endregion
 
+#pragma region 병합 정렬
+
+// 병합 정렬
+// 분할 정복
+// - 분할 - Divide - 문제를 더 단순하게 분할
+// - 정복 - Conquer - 분할된 문제를 해결
+// - 결합 - combine - 결과를 취합하여 마무리
+
+// [3][K][7][2][3][4][8][9]         8개 * 1
+// [3][K][7][2] [J][4][8][9]		4개 * 2
+// [3][K] [7][2] [J][4] [8][9]		2개 * 4
+// [3] [K] [7] [2] [J] [4] [8] [9]	1개 * 8
+// [3][K] [2][7]  [4][J]  [8][9]	2개 * 4
+
+vector<int> Merge(vector<int> a, vector<int> b)
+{
+    vector<int> temp;
+    return temp;
+}
+
+void MergeResult(vector<int>& v, int left, int mid, int right)
+{
+    // [2][3][7][K][4][8][9][J]
+    //          [1]             [r]
+    int leftIdx = left;
+    int rightIdx = mid + 1;
+
+    // [2]
+    vector<int> temp;
+
+    while (leftIdx <= mid && rightIdx <= right)
+    {
+        if (v[leftIdx] <= v[rightIdx])
+        {
+            temp.push_back(v[leftIdx]);
+            leftIdx++;
+        }
+        else
+        {
+            temp.push_back(v[rightIdx]);
+            rightIdx++;
+        }
+    }
+
+    if (leftIdx > mid)
+    {
+        while (rightIdx <= right)
+        {
+            temp.push_back(v[rightIdx]);
+            rightIdx++;
+        }
+    }
+    else
+    {
+        while (leftIdx <= mid)
+        {
+            temp.push_back(v[leftIdx]);
+            leftIdx++;
+        }
+    }
+
+    for (int i = 0; i < temp.size(); ++i)
+        v[left + i] = temp[i];
+}
+
+void MergeSort(vector<int>& v, int left, int right)
+{
+    if (left >= right)
+        return;
+
+    int mid = (left + right) / 2;
+    MergeSort(v, left, mid);
+    MergeSort(v, mid + 1, right);
+
+    MergeResult(v, left, mid, right);
+}
+#pragma endregion 
 int main()
 {
-	BinarySearchTree bst;
+    vector<int> v;
 
-	bst.Insert(30);
-	bst.Print();
-	this_thread::sleep_for(1s);
+    srand(time(0));
 
-	bst.Insert(10);
-	bst.Print();
-	this_thread::sleep_for(1s);
+    for (int i = 0; i < 6; i++)
+    {
+        int randValue = rand() % 100;
+        v.push_back(randValue);
+    }
 
-	bst.Insert(20);
-	bst.Print();
-	this_thread::sleep_for(1s);
+    //BubbleSort(v);
+    //SelectionSort(v);
+    //InsertionSort(v);
+    //HeapSort(v);
 
-	bst.Insert(25);
-	bst.Print();
-	this_thread::sleep_for(1s);
-
-	bst.Delete(20);
-	bst.Print();
-	this_thread::sleep_for(1s);
-
-	bst.Delete(10);
-	bst.Print();
-	this_thread::sleep_for(1s);
+    MergeSort(v, 0, v.size() - 1);
 
 }
