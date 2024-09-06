@@ -15,6 +15,19 @@ enum class TileType
 	WALL,
 };
 
+struct CostEdge
+{
+	int cost;
+	POS u;
+	POS v;
+
+	bool operator<(CostEdge& other)
+	{
+		return cost < other.cost;
+	}
+};
+
+
 class Board
 {
 public:
