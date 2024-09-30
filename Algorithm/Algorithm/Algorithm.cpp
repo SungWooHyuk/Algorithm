@@ -1088,38 +1088,101 @@ void TestHashTableChaining()
 // LIS : 제일 긴 [순 증가 부분 수열]의 길이
 // 1 2 5 7 = 길이 4
 
-int cache[100];
-vector<int> seq;
+//int cache[100];
+//vector<int> seq;
+//
+//int LIS(int pos)
+//{
+//    // 기저사항
+//
+//    // 캐시 확인
+//    int& ret = cache[pos];
+//    if (ret != -1)
+//        return ret;
+//
+//    // 구하기
+//
+//    // 최소 seq[pos]는 있으니 1부터 시작
+//    ret = 1; // 길이임
+//
+//    // 구하기
+//    for (int next = pos + 1; next < seq.size(); ++next)
+//        if (seq[pos] < seq[next])
+//            ret = max(ret, 1 + LIS(next));
+//
+//    return ret;
+//}
+#pragma endregion
 
-int LIS(int pos)
+#pragma region TRIANGLE_PATH DP
+
+// TRIANGLE_PATH
+// - (0,0)부터 시작해서 아래 or 아래우측으로 이동 가능
+// - 만나는 숫자를 모두 더함
+// - 더한 숫자가 최대가 되는 경로? 합?
+
+// 6
+// 1 2
+// 3 7 4
+// 9 4 1 7
+// 2 7 5 9 4
+
+int N;
+vector<vector<int>> board;
+vector<vector<int>> cache;
+vector<vector<int>> nextX;
+
+int path(int y, int x)
 {
-    // 기저사항
+    // 기저 사항
+    if (y == N)
+        return 0;
 
     // 캐시 확인
-    int& ret = cache[pos];
+    int& ret = cache[y][x];
     if (ret != -1)
         return ret;
 
-    // 구하기
+    // 경로 기록
+    {
+        int nextBottom = path(y + 1, x);
+        int nextBottomRight = path(y + 1, x + 1);
+        if (nextBottom > nextBottomRight)
+            nextX[y][x] = x;
+        else
+            nextX[y][x] = x + 1;
+    }
 
-    // 최소 seq[pos]는 있으니 1부터 시작
-    ret = 1; // 길이임
-
-    // 구하기
-    for (int next = pos + 1; next < seq.size(); ++next)
-        if (seq[pos] < seq[next])
-            ret = max(ret, 1 + LIS(next));
-
-    return ret;
+    return ret = board[y][x] + max(path(y + 1, x), path(y + 1, x + 1));
 }
+
 #pragma endregion
 int main()
 {
-    ::memset(cache, -1, sizeof(cache));
-    seq = vector<int>{ 10,2,1,4,5,8 };
+    board = vector<vector<int>>
+    {
+        {6},
+        {1, 2},
+        {3, 7, 4},
+        {9, 4, 1, 7},
+        {2, 7, 5, 9, 4}
+    };
 
-    int ret = 0;
-    for (int pos = 0; pos < seq.size(); ++pos)
-        ret = max(ret, LIS(pos));
+    N = board.size();
+    cache = vector<vector<int>>(N, vector<int>(N, -1));
+    nextX = vector<vector<int>>(N, vector<int>(N));
 
+    int ret = path(0, 0);
+    cout << ret << endl;
+
+    int y = 0;
+    int x = 0;
+
+    while (y < N)
+    {
+        cout << board[y][x] << " -> ";
+        x = nextX[y][x];
+        y++;
+    }
+    
 }
