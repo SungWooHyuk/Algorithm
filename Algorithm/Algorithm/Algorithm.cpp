@@ -355,7 +355,7 @@ using namespace std;
 //    int _size = 0;
 //};
 //
-//#pragma region 다익스트라
+#pragma region 다익스트라
 //struct Vertex
 //{
 //    // int data;
@@ -438,8 +438,8 @@ using namespace std;
 //
 //    int a = 3;
 //}
-//#pragma endregion
-//#pragma region 트리노드
+#pragma endregion
+#pragma region 트리노드
 //struct Node
 //{
 //    Node() {}
@@ -524,8 +524,8 @@ using namespace std;
 //
 //    return height;
 //}
-//#pragma endregion
-//#pragma region 우선순위 큐
+#pragma endregion
+#pragma region 우선순위 큐
 //
 //template<typename T, typename Container = vector<T>, typename Predicate = less<T>>
 //class PriorityQueue
@@ -601,8 +601,8 @@ using namespace std;
 //	Predicate _predicate = {};
 //};
 //
-//#pragma endregion
-//#pragma region 이진탐색
+#pragma endregion
+#pragma region 이진탐색
 //
 //// 면접때 많이 물어보고, STL에서 map을 사용하면 사용된다.
 //// 이진 탐색 (binary search)
@@ -643,8 +643,8 @@ using namespace std;
 //	}
 //}
 //
-//#pragma endregion
-//#pragma region 버블 정렬
+#pragma endregion
+#pragma region 버블 정렬
 //
 //void BubbleSort(vector<int>& v)
 //{
@@ -660,8 +660,8 @@ using namespace std;
 //	}
 //}
 //
-//#pragma endregion
-//#pragma region 선택 정렬
+#pragma endregion
+#pragma region 선택 정렬
 //void SelectionSort(vector<int>& v)
 //{
 //	const int n = (int)v.size();
@@ -679,8 +679,8 @@ using namespace std;
 //		swap(v[i], v[bestIdx]);
 //	}
 //}
-//#pragma endregion
-//#pragma region 삽입정렬
+#pragma endregion
+#pragma region 삽입정렬
 //void InsertionSort(vector<int>& v)
 //{
 //	const int n = (int)v.size();
@@ -701,8 +701,8 @@ using namespace std;
 //		v[j + 1] = insertData;
 //	}
 //}
-//#pragma endregion
-//#pragma region 힙 정렬
+#pragma endregion
+#pragma region 힙 정렬
 //void HeapSort(vector<int>& v)
 //{
 //	priority_queue<int, vector<int>, greater<int>> pq;
@@ -715,7 +715,7 @@ using namespace std;
 //		pq.pop();
 //	}
 //}
-//#pragma endregion
+#pragma endregion
 
 #pragma region 병합 정렬
 
@@ -941,7 +941,7 @@ void TestHashTableChaining()
 }
 #pragma endregion
 
-//#pragma region 그래프/트리 응용 MST전에 Union-Find
+#pragma region 그래프/트리 응용 MST전에 Union-Find
 //
 //class DisJoinSet
 //{
@@ -1072,12 +1072,54 @@ void TestHashTableChaining()
 //
 //    return ret;
 //}
-//#pragma endregion
+#pragma endregion
+
+#pragma region DP-LIS
+
+// LIS (Longest Increasing Sequence)
+
+// Seq : 1 9 2 5 7
+// 부분 수열 : 일부(0개 이상) 숫자를 지우고 남은 수열
+// ex) 1 2 5
+// ex) 1 9 5 7
+// 순 증가 부분 수열
+// ex) 1 2 5
+
+// LIS : 제일 긴 [순 증가 부분 수열]의 길이
+// 1 2 5 7 = 길이 4
+
+int cache[100];
+vector<int> seq;
+
+int LIS(int pos)
+{
+    // 기저사항
+
+    // 캐시 확인
+    int& ret = cache[pos];
+    if (ret != -1)
+        return ret;
+
+    // 구하기
+
+    // 최소 seq[pos]는 있으니 1부터 시작
+    ret = 1; // 길이임
+
+    // 구하기
+    for (int next = pos + 1; next < seq.size(); ++next)
+        if (seq[pos] < seq[next])
+            ret = max(ret, 1 + LIS(next));
+
+    return ret;
+}
+#pragma endregion
 int main()
 {
-    CreateGraph();
+    ::memset(cache, -1, sizeof(cache));
+    seq = vector<int>{ 10,2,1,4,5,8 };
 
-    vector<CostEdge> selected;
-    int cost = Kruskal(selected);
+    int ret = 0;
+    for (int pos = 0; pos < seq.size(); ++pos)
+        ret = max(ret, LIS(pos));
 
 }
