@@ -16,7 +16,7 @@ void Player::Update(uint64 deltaTick)
 {
 	if (_pathIndex >= _path.size())
 	{
-		_board->GenerateMap();
+		_board->GenerateMap_Prim();
 		Init(_board);
 		return;
 	}
@@ -201,7 +201,7 @@ void Player::AStar()
 
 	enum
 	{
-		DIR_COUNT = 8
+		DIR_COUNT = 4
 	};
 
 	POS front[] =
