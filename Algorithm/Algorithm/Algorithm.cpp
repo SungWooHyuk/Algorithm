@@ -733,65 +733,65 @@ using namespace std;
 
 vector<int> Merge(vector<int> a, vector<int> b)
 {
-    vector<int> temp;
-    return temp;
+	vector<int> temp;
+	return temp;
 }
 
 void MergeResult(vector<int>& v, int left, int mid, int right)
 {
-    // [2][3][7][K][4][8][9][J]
-    //          [1]             [r]
-    int leftIdx = left;
-    int rightIdx = mid + 1;
+	// [2][3][7][K][4][8][9][J]
+	//          [1]             [r]
+	int leftIdx = left;
+	int rightIdx = mid + 1;
 
-    // [2]
-    vector<int> temp;
+	// [2]
+	vector<int> temp;
 
-    while (leftIdx <= mid && rightIdx <= right)
-    {
-        if (v[leftIdx] <= v[rightIdx])
-        {
-            temp.push_back(v[leftIdx]);
-            leftIdx++;
-        }
-        else
-        {
-            temp.push_back(v[rightIdx]);
-            rightIdx++;
-        }
-    }
+	while (leftIdx <= mid && rightIdx <= right)
+	{
+		if (v[leftIdx] <= v[rightIdx])
+		{
+			temp.push_back(v[leftIdx]);
+			leftIdx++;
+		}
+		else
+		{
+			temp.push_back(v[rightIdx]);
+			rightIdx++;
+		}
+	}
 
-    if (leftIdx > mid)
-    {
-        while (rightIdx <= right)
-        {
-            temp.push_back(v[rightIdx]);
-            rightIdx++;
-        }
-    }
-    else
-    {
-        while (leftIdx <= mid)
-        {
-            temp.push_back(v[leftIdx]);
-            leftIdx++;
-        }
-    }
+	if (leftIdx > mid)
+	{
+		while (rightIdx <= right)
+		{
+			temp.push_back(v[rightIdx]);
+			rightIdx++;
+		}
+	}
+	else
+	{
+		while (leftIdx <= mid)
+		{
+			temp.push_back(v[leftIdx]);
+			leftIdx++;
+		}
+	}
 
-    for (int i = 0; i < temp.size(); ++i)
-        v[left + i] = temp[i];
+	for (int i = 0; i < temp.size(); ++i)
+		v[left + i] = temp[i];
 }
 
 void MergeSort(vector<int>& v, int left, int right)
 {
-    if (left >= right)
-        return;
+	if (left >= right)
+		return;
 
-    int mid = (left + right) / 2;
-    MergeSort(v, left, mid);
-    MergeSort(v, mid + 1, right);
+	int mid = (left + right) / 2;
+	MergeSort(v, left, mid);
+	MergeSort(v, mid + 1, right);
 
-    MergeResult(v, left, mid, right);
+	MergeResult(v, left, mid, right);
 }
 #pragma endregion 
 
@@ -799,35 +799,35 @@ void MergeSort(vector<int>& v, int left, int right)
 
 int Partition(vector<int>& v, int left, int right)
 {
-    int pivot = v[left];
-    int low = left + 1;
-    int high = right;
+	int pivot = v[left];
+	int low = left + 1;
+	int high = right;
 
-    // O(N)
-    while (low <= high)
-    {
-        while (low <= right && pivot >= v[low])
-            low++;
+	// O(N)
+	while (low <= high)
+	{
+		while (low <= right && pivot >= v[low])
+			low++;
 
-        while (high >= left && pivot <= v[high])
-            high--;
+		while (high >= left && pivot <= v[high])
+			high--;
 
-        if (low < high)
-            swap(v[low], v[high]);
-    }
+		if (low < high)
+			swap(v[low], v[high]);
+	}
 
-    swap(v[left], v[high]);
-    return high;
+	swap(v[left], v[high]);
+	return high;
 }
 
 void QuickSort(vector<int>& v, int left, int right)
 {
-    if (left > right)
-        return;
+	if (left > right)
+		return;
 
-    int pivot = Partition(v, left, right);
-    QuickSort(v, left, pivot - 1);
-    QuickSort(v, pivot + 1, right);
+	int pivot = Partition(v, left, right);
+	QuickSort(v, left, pivot - 1);
+	QuickSort(v, pivot + 1, right);
 }
 
 #pragma endregion
@@ -848,23 +848,23 @@ void QuickSort(vector<int>& v, int left, int right)
 
 void TestTable()
 {
-    struct User
-    {
-        int userId = 0;
-        string username;
-    };
+	struct User
+	{
+		int userId = 0;
+		string username;
+	};
 
-    vector<User> users;
-    users.resize(1000);
+	vector<User> users;
+	users.resize(1000);
 
-    users[777] = User{ 777, "Rookiss" };
+	users[777] = User{ 777, "Rookiss" };
 
-    string name = users[777].username;
-    cout << name << endl;
+	string name = users[777].username;
+	cout << name << endl;
 
-    // 테이블
-    // 키를 알면 데이터를 단번에 찾을 수 있다.
-    // 만약 3억 이렇게 넘어가면 문제
+	// 테이블
+	// 키를 알면 데이터를 단번에 찾을 수 있다.
+	// 만약 3억 이렇게 넘어가면 문제
 }
 
 // 보안
@@ -875,69 +875,69 @@ void TestTable()
 
 void TestHash()
 {
-    struct User
-    {
-        int userId = 0;
-        string username;
-    };
+	struct User
+	{
+		int userId = 0;
+		string username;
+	};
 
-    vector<User> users;
-    users.resize(1000);
+	vector<User> users;
+	users.resize(1000);
 
-    const int userId = 123456789;
-    int key = (userId % 1000); // hash <- 고유번호
+	const int userId = 123456789;
+	int key = (userId % 1000); // hash <- 고유번호
 
-    // 123456789번 유저 정보 세팅
-    users[key] = User{ userId, "Rookiss" };
+	// 123456789번 유저 정보 세팅
+	users[key] = User{ userId, "Rookiss" };
 
-    //123456789번 유저 이름
-    User& user = users[key];
-    if (user.userId == userId)
-    {
-        string name = user.username;
-        cout << name << endl;
-    }
+	//123456789번 유저 이름
+	User& user = users[key];
+	if (user.userId == userId)
+	{
+		string name = user.username;
+		cout << name << endl;
+	}
 
-    // 충돌 문제
-    // 충돌이 발생한 자리를 대신해서 다른 빈자리를 찾아나선다
-    // 선형 조사법 (linear probing)
-    // hash(key)+1 -> hash(key)+2
-    // 이차 조사법 (quadratic probing)
-    // hash(key)+1^2 -> hash(key)+2^2
-    // -etc
+	// 충돌 문제
+	// 충돌이 발생한 자리를 대신해서 다른 빈자리를 찾아나선다
+	// 선형 조사법 (linear probing)
+	// hash(key)+1 -> hash(key)+2
+	// 이차 조사법 (quadratic probing)
+	// hash(key)+1^2 -> hash(key)+2^2
+	// -etc
 
-    // 체이닝
+	// 체이닝
 }
 
 //O(1)
 void TestHashTableChaining()
 {
-    struct User
-    {
-        int userId = 0;
-        string username;
-    };
+	struct User
+	{
+		int userId = 0;
+		string username;
+	};
 
-    vector<vector<User>> users;
-    users.resize(1000);
+	vector<vector<User>> users;
+	users.resize(1000);
 
-    const int userId = 123456789;
-    int key = (userId % 1000); // hash <- 고유번호
+	const int userId = 123456789;
+	int key = (userId % 1000); // hash <- 고유번호
 
-    // 123456789번 유저 번호 세팅
-    users[key].push_back(User{ userId, "Rookiss" });
-    users[789].push_back(User{ 789, "Faker" });
+	// 123456789번 유저 번호 세팅
+	users[key].push_back(User{ userId, "Rookiss" });
+	users[789].push_back(User{ 789, "Faker" });
 
-    // 123456789번 유저 이름은?
-    vector<User>& bucket = users[key];
-    for (User& user : bucket)
-    {
-        if (user.userId == userId)
-        {
-            string name = user.username;
-            cout << name << endl;
-        }
-    }
+	// 123456789번 유저 이름은?
+	vector<User>& bucket = users[key];
+	for (User& user : bucket)
+	{
+		if (user.userId == userId)
+		{
+			string name = user.username;
+			cout << name << endl;
+		}
+	}
 }
 #pragma endregion
 
@@ -1127,62 +1127,194 @@ void TestHashTableChaining()
 // 9 4 1 7
 // 2 7 5 9 4
 
-int N;
-vector<vector<int>> board;
-vector<vector<int>> cache;
-vector<vector<int>> nextX;
+//int N;
+//vector<vector<int>> board;
+//vector<vector<int>> cache;
+//vector<vector<int>> nextX;
+//
+//int path(int y, int x)
+//{
+//    // 기저 사항
+//    if (y == N)
+//        return 0;
+//
+//    // 캐시 확인
+//    int& ret = cache[y][x];
+//    if (ret != -1)
+//        return ret;
+//
+//    // 경로 기록
+//    {
+//        int nextBottom = path(y + 1, x);
+//        int nextBottomRight = path(y + 1, x + 1);
+//        if (nextBottom > nextBottomRight)
+//            nextX[y][x] = x;
+//        else
+//            nextX[y][x] = x + 1;
+//    }
+//
+//    return ret = board[y][x] + max(path(y + 1, x), path(y + 1, x + 1));
+//}
 
-int path(int y, int x)
+#pragma endregion
+
+#pragma region TIC_TAE_TOE DP
+
+// [o][x][.]
+// [.][o][x]
+// [.][.][o]
+
+// 0 ~ 3 ^ 9 = 19683
+
+int HashKey(const vector<vector<char>>& board)
 {
-    // 기저 사항
-    if (y == N)
-        return 0;
+	int ret = 0;
 
-    // 캐시 확인
-    int& ret = cache[y][x];
-    if (ret != -1)
-        return ret;
+	for (int y = 0; y < 3; ++y)
+	{
+		for (int x = 0; x < 3; ++x)
+		{
+			ret = ret * 3;
 
-    // 경로 기록
-    {
-        int nextBottom = path(y + 1, x);
-        int nextBottomRight = path(y + 1, x + 1);
-        if (nextBottom > nextBottomRight)
-            nextX[y][x] = x;
-        else
-            nextX[y][x] = x + 1;
-    }
+			if (board[y][x] == 'o')
+				ret += 1;
+			else if (board[y][x] == 'x')
+				ret += 2;
+		}
+	}
 
-    return ret = board[y][x] + max(path(y + 1, x), path(y + 1, x + 1));
+	return ret;
+}
+
+vector<vector<char>> board;
+int cache[19683];
+
+bool IsFinished(const vector<vector<char>>& board, char turn)
+{
+	// 좌우
+	for (int i = 0; i < 3; i++)
+		if (board[i][0] == turn && board[i][1] == turn && board[i][2] == turn)
+			return true;
+
+	// 상하
+	for (int i = 0; i < 3; i++)
+		if (board[0][i] == turn && board[1][i] == turn && board[2][i] == turn)
+			return true;
+
+	// 대각선
+	if (board[0][0] == turn && board[1][1] == turn && board[2][2] == turn)
+		return true;
+
+	if (board[0][2] == turn && board[1][1] == turn && board[2][0] == turn)
+		return true;
+
+	return false;
+}
+
+enum
+{
+	DEFAULT = 2,
+	WIN = 1,
+	DRAW = 0,
+	LOSE = -1
+};
+
+int CanWin(vector<vector<char>>& board, char turn)
+{
+	// 기저사례
+	if (IsFinished(board, 'o' + 'x' - turn))
+		return LOSE;
+
+	// 캐시 확인
+	int key = HashKey(board);
+	int& ret = cache[key];
+	if (ret != DEFAULT)
+		return ret;
+
+	// 풀기
+
+	// [.][x][.]
+	// [.][o][.]
+	// [.][.][.]
+	int minValue = DEFAULT;
+
+	for (int y = 0; y < 3; ++y)
+	{
+		for (int x = 0; x < 3; ++x)
+		{
+			if (board[y][x] != '.')
+				continue;
+
+			// 착수
+			board[y][x] = turn;
+
+			//확인
+			minValue = min(minValue, CanWin(board, 'o' + 'x' - turn)); // 상대방이 패배했을때가 제일 좋은케이스
+			
+			//취소
+			board[y][x] = '.';
+		}
+	}
+
+	if (minValue == DRAW || minValue == DEFAULT)
+		return ret = DRAW;
+
+	return ret = -minValue; // 상대가 이기면 내가 지고 상대가 지면 내가 이김
 }
 
 #pragma endregion
 int main()
 {
-    board = vector<vector<int>>
-    {
-        {6},
-        {1, 2},
-        {3, 7, 4},
-        {9, 4, 1, 7},
-        {2, 7, 5, 9, 4}
-    };
+	{ // TRIANGLE_PATH
+	/*	board = vector<vector<int>>
+		{
+			{6},
+			{1, 2},
+			{3, 7, 4},
+			{9, 4, 1, 7},
+			{2, 7, 5, 9, 4}
+		};
 
-    N = board.size();
-    cache = vector<vector<int>>(N, vector<int>(N, -1));
-    nextX = vector<vector<int>>(N, vector<int>(N));
+		N = board.size();
+		cache = vector<vector<int>>(N, vector<int>(N, -1));
+		nextX = vector<vector<int>>(N, vector<int>(N));
 
-    int ret = path(0, 0);
-    cout << ret << endl;
+		int ret = path(0, 0);
+		cout << ret << endl;
 
-    int y = 0;
-    int x = 0;
+		int y = 0;
+		int x = 0;
 
-    while (y < N)
-    {
-        cout << board[y][x] << " -> ";
-        x = nextX[y][x];
-        y++;
-    }
-    
+		while (y < N)
+		{
+			cout << board[y][x] << " -> ";
+			x = nextX[y][x];
+			y++;
+		}*/
+	}
+
+	board = vector<vector<char>>
+	{
+		{'.', '.', '.'},
+		{'.', '.', '.'},
+		{'.', '.', '.'}
+	};
+
+	for (int i = 0; i < 19683; i++)
+		cache[i] = DEFAULT;
+
+	int win = CanWin(board, 'x');
+
+	switch (win)
+	{
+	case WIN:
+		cout << "Win" << endl;
+		break;
+	case DRAW:
+		cout << "Draw" << endl;
+		break;
+	case LOSE:
+		cout << "Lose" << endl;
+		break;
+	}
 }
